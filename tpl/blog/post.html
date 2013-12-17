@@ -1,0 +1,23 @@
+{% load staticfiles %}
+<article class="post tag-ghost-post tag-video">
+    <div class="fairy-panel">
+        <header class="post-header">
+            <h2 class="post-title"><a href="{% url 'blog.views.page' post.pk|default:0 %}">{{ post.header|safe }}</a></h2>
+            <span class="post-date"><time datetime="2013-11-19">{{ post.date_time|date:'d E Y' }}</time></span>
+        </header>
+
+        <section class="post-excerpt">
+            {% if preview %}
+                {{ post.preview|safe }}
+                <a href="{% url 'blog.views.page' post.pk|default:0 %}" class="btn btn-link btn_read_post">Читать</a>
+            {% else %}
+                {{ post.content|safe }}
+            {% endif %}
+            <br/>
+        </section>
+        <section class="post-meta">
+            <img class="img-circle" src="{% static post.author.avatar|safe %}">
+            <span>{{ post.author.name|safe }}</span>
+        </section>
+    </div>
+</article>

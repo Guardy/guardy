@@ -1,0 +1,138 @@
+{% extends 'generic/page.html' %}
+{% load staticfiles %}
+
+{% block title %}Веб безопасность{% endblock %}
+{% block extrastyle %}
+    <style>
+    </style>
+{% endblock %}
+
+{% block bodyclass %}home-template{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    {% if has_more %}
+        <div class="row text-center">
+            <a class="btn btn-fairy btn-lg" next="{{ next_page }}" id="button-load-more"
+               onclick="loadMore(this); return false;"
+               href="{% url 'home.views.page' next_page %}">Читать дальше</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% for post in articles %}
+        <article class="post tag-ghost-post tag-documentation tag-fairy">
+            <div class="fairy-panel">
+                <header class="post-header">
+                    <h2 class="post-title"><a href="#">{{ post.header|safe }}</a></h2>
+                </header>
+
+                <section class="post-excerpt">
+                    {{ post.content|safe }}
+                </section>
+            </div>
+        </article>
+    {% endfor %}
+
+    {% for post in posts %}
+        {% if forloop.counter > first_blog_post %}
+            {% if forloop.counter <= last_blog_post %}
+                <div datetime="{{ post.date_time|date:'c' }}" id="post_{{ post.pk }}" class="blog_post_container">
+                    {% include 'blog/post.html' %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block side %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sidebar-box">
+                {% include 'home/contact_form.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sidebar-box">
+                {% include 'home/social.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block extrascripts %}
+    <script type="text/javascript">
+        {#    RESPONSES #}
+        function showError(json) {
+            var re = /\\u[^\\u\s]*/g;
+            var match = {};
+            var err = String(json.error);
+            while (match = re.exec(json.error)) {
+                var num = parseInt(match[0].replace('\\u0', ''), 16);
+                err = err.replace(match[0], String.fromCharCode(num));
+            }
+            alert(err);
+        }
+
+        {#    REQUESTS #}
+        function ajaxFunc(url, data, func, type) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}';
+            $.ajax({
+                url: url,
+                type: type,
+                dataType: "json",
+                success: function (json) {
+                    if (json.status == 200) {
+                        func(json)
+                    } else {
+                        showError(json);
+                    }
+                },
+                data: data
+            });
+        }
+
+        function ajaxGet(url, data, func) {
+            return ajaxFunc(url, data, func, 'GET');
+        }
+
+        function ajaxPost(url, data, func) {
+            return ajaxFunc(url, data, func, 'POST');
+        }
+
+        function loadMore(button) {
+            var $btn = $(button);
+            var $lastPost = $('.blog_post_container:last');
+            var data = {
+                'from': $lastPost.attr('datetime'),
+                'count': {{ show_more_count }},
+                'preview': true
+            };
+            var url = "{% url 'blog.views.posts_range' %}"
+            return ajaxGet(
+                    url,
+                    data,
+                    function (json) {
+                        var next = parseInt($btn.attr('next')) + 1;
+                        json.posts.forEach(
+                                function (post) {
+                                    var $container = $('<div class="blog_post_container"></div>');
+                                    $container.attr('id', 'post_' + post.id);
+                                    $container.attr('datetime', post.datetime);
+                                    $container.html(post.html);
+                                    $btn.parent().before($container);
+                                    $btn.attr('href', 'page/' + next);
+                                    $btn.attr('next', next)
+                                }
+                        );
+                        if (!json.more)
+                            $btn.hide()
+                    }
+            );
+        }
+    </script>
+{% endblock %}

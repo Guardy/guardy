@@ -1,0 +1,59 @@
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#sidebar-facebook" data-toggle="tab">Facebook</a></li>
+    <li><a href="#sidebar-twitter" data-toggle="tab">Twitter</a></li>
+    <li><a href="#sidebar-google-plus" data-toggle="tab">Google+</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content text-center">
+
+    <div class="tab-pane active" id="sidebar-facebook">
+
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_GB/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+
+        <div class="fb-like-box" data-href="http://www.facebook.com/devsharing" data-width="240"
+             data-border-color="#249ad5" data-show-faces="true" data-stream="false"
+             data-header="false"></div>
+    </div>
+
+    <div class="tab-pane" id="sidebar-twitter">
+        <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/Guardy"
+           data-widget-id="">Tweets by @Guardy</a>
+        <script>!function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = p + "://platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, "script", "twitter-wjs");</script>
+    </div>
+
+    <div class="tab-pane" id="sidebar-google-plus">
+        <!-- Place this tag where you want the widget to render. -->
+        <div class="g-page" data-width="240" data-href="//plus.google.com/"
+             data-rel="publisher"></div>
+        <!-- Place this tag after the last widget tag. -->
+        <script type="text/javascript">
+            (function () {
+                var po = document.createElement('script');
+                po.type = 'text/javascript';
+                po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+    </div>
+</div>
