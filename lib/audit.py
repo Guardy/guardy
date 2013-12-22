@@ -42,10 +42,13 @@ def refresh_apache(program):
     getting apache object with current version
     """
     version = None
-    #content = get_content().split('p')
-    #for elem in content:
-     #   if 'Stable Release - Latest Version' in elem:
-     #       print elem
+    version = None
+    content = get_content(program.url).split('<p')
+    for elem in content:
+        if 'Stable Release - Latest Version' in elem:
+            version = re.findall('">(.+)</a', elem)[0]
+            break
+
     return
 
 
