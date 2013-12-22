@@ -41,7 +41,12 @@ def refresh_apache(program):
     """
     getting apache object with current version
     """
-    content = get_content(program.url)
+    version = None
+    #content = get_content().split('p')
+    #for elem in content:
+     #   if 'Stable Release - Latest Version' in elem:
+     #       print elem
+    return
 
 
 def refresh_products():
@@ -74,7 +79,4 @@ def audit(url):
     print 'hip-hip'
 
     return 0
-
-
-audit('k-m2.ru')
 
