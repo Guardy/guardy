@@ -35,7 +35,6 @@ def refresh_nginx(program):
                     break
     if version:
         program.version = version
-        program.save()
 
 
 def refresh_apache(program):

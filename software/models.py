@@ -8,6 +8,7 @@ class Program(models.Model):
 
     def refresh(self, function):
         function(self)
+        self.save()
 
     def __unicode__(self):
         return self.name
