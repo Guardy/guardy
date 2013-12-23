@@ -39,7 +39,7 @@ def get_nginx():
     """
     getting nginx object with current version
     """
-    product = Product(name='nginx', url='nginx.org/en/download.html')
+    product = Product(name='nginx', url='http://nginx.org/en/download.html')
     content = product.page.split('<center>')
     for elem in content:
         if 'Stable' in elem:
@@ -54,7 +54,7 @@ def get_apache():
     """
     getting apache object with current version
     """
-    product = Product(name='apache', url='httpd.apache.org/download.cgi')
+    product = Product(name='apache', url='http://httpd.apache.org/download.cgi')
     return  product
 
 
@@ -68,8 +68,8 @@ def get_products():
 
 
 def audit(url):
-    output = use_bash('whatweb -a 3 ', url + ' --color=never').split(',')
-    print output
+    #output = use_bash('whatweb -a 3 ', url + ' --color=never').split(',')
+    #print output
     #for line in output:
     #     if 'nginx[' in line:
 	 #    cur_ver = re.findall('nginx\[(.+)\]',line)[0]
