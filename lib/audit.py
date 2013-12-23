@@ -1,3 +1,4 @@
+from software.models import Program
 import subprocess
 import re
 import urllib
@@ -20,51 +21,40 @@ def get_content(url):
     return urllib.urlopen(url).read()
 
 
-class Product(object):
-    """
-    base product object
-    """
-    name = None
-    url = None
-    page = None
-    version = None
-
-    def __init__(self, name, url):
-        self.name = name
-        self.url = url
-        self.page = get_content(url)
-
-
-def get_nginx():
+def refresh_nginx(program):
     """
     getting nginx object with current version
     """
-    product = Product(name='nginx', url='http://nginx.org/en/download.html')
-    content = product.page.split('<center>')
+    version = None
+    content = get_content(program.url).split('<center>')
     for elem in content:
         if 'Stable' in elem:
             for i in elem.split('<a'):
                 if 'download' in i:
-                    product.version = re.findall('>nginx-(.+)<', i)[0]
+                    version = re.findall('>nginx-(.+)<', i)[0]
                     break
-    return product
+    if version:
+        program.version = version
+        program.save()
 
 
-def get_apache():
+def refresh_apache(program):
     """
     getting apache object with current version
     """
-    product = Product(name='apache', url='http://httpd.apache.org/download.cgi')
-    return  product
+    content = get_content(program.url)
 
 
-def get_products():
-    nginx = get_nginx()
-    apache = get_apache()
-    return {
-        nginx.name: nginx,
-        apache.name: apache
-    }
+def refresh_products():
+    programs = Program.objects.all()
+    for prog in programs:
+        try:
+            if prog.name == 'nginx':
+                prog.refresh(refresh_nginx)
+            elif prog.name == 'apache':
+                prog.refresh(refresh_apache)
+        except Exception, expt:
+            pass
 
 
 def audit(url):
@@ -78,8 +68,8 @@ def audit(url):
     #         if StrictVersion(cur_ver) < StrictVersion(nginx_latest_version):
 	 #        print 'Warning nginx is outdated!'
 
-    products = get_products()
-    print products
+    refresh_products()
+    print 'hip-hip'
 
     return 0
 
