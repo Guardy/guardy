@@ -45,6 +45,9 @@ def refresh_apache(program):
 
 
 def refresh_products():
+    """
+    gets all available software and refreshes them
+    """
     programs = Program.objects.all()
     for prog in programs:
         try:
