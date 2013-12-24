@@ -1,5 +1,5 @@
 from django.db import models
-import refresher
+from software import refresher
 
 
 class Program(models.Model):

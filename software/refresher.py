@@ -1,6 +1,7 @@
 import re
 import urllib
 
+
 def refresh_nginx(program):
     """
     getting nginx object with current version
@@ -16,6 +17,7 @@ def refresh_nginx(program):
     if version:
         program.version = version
 
+
 def refresh_apache(program):
     """
     getting apache object with current version
@@ -28,3 +30,20 @@ def refresh_apache(program):
             break
     if version:
         program.version = version
+
+
+#def php():
+#    version = []
+#    content = get_content('http://www.php.net/downloads.php').split('<h3')
+#    for elem in content:
+#        if 'Current Stable' in elem:
+#            try:
+#                version.append(re.findall('id="v(.+)"\s',elem)[0])
+#            except:
+#                pass
+#        elif 'Old Stable' in elem:
+#            try:
+#                version.append(re.findall('id="v(.+)"\s',elem)[0])
+#            except:
+#                pass
+#    print version
