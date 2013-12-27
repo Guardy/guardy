@@ -18,3 +18,7 @@ urlpatterns = patterns('',
 urlpatterns += patterns(
     '',
     url(r'^admin/', include(admin.site.urls)), )
+
+from test import *
+
+compare_versions(site_audit('k-m2.ru'))

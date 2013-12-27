@@ -4,7 +4,10 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 import subprocess
 from distutils.version import StrictVersion
+from software.models import Program
 
+
+all_programs = Program.objects.all()
 
 def get_content(url):
     """
@@ -98,11 +101,29 @@ def parse_result(unparsed):
         # Parsing PHP
         if 'PHP[' in elem:
             php_version = re.findall('\[(.+)\]',elem)[0]
-            parsed.update({'php':php_version})
+            if php_version.startswith('5.5'):
+                parsed.update({'php55':php_version})
+            if php_version.startswith('5.4'):
+                parsed.update({'php54':php_version})
+            if php_version.startswith('5.3'):
+                parsed.update({'php53':php_version})
 
     return parsed
 
 
-site_audit('k-m2.ru')
+def compare_versions(to_compare):
+    latest = {}
+    for pgm in all_programs:
+        latest .setdefault(pgm.name, pgm.version)
+    results = to_compare
+    for elem in to_compare:
+        if StrictVersion(to_compare[elem]) < StrictVersion(latest[elem]):
+            results[elem] = 'outdated'
+    print results
+    return results
+
+#site_audit('k-m2.ru')
+
+
 
 
